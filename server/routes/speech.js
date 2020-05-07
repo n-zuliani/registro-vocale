@@ -4,7 +4,7 @@ var path = require('path');
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-  let text = main(res).catch(console.error);
+  main(res).catch(console.error);
 });
 
 async function main(res) {
