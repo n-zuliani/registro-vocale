@@ -31,18 +31,50 @@ export class ReadSpeechComponent implements OnInit, OnDestroy {
   data: any;
 
   ngOnInit(): void {
-   // this.o = this.http.get('https://3000-e1b6f371-04be-4e91-8e2d-1e7328a3ab4d.ws-eu01.gitpod.io/speech');
-   // this.o.subscribe(data => { this.data = data; this.popup(this.data.text) });
+   this.o = this.http.get('https://3000-ec08a519-78a2-4ec4-95ac-e3611b882280.ws-eu01.gitpod.io/speech');
+   this.o.subscribe(data => { this.data = data; this.popup(this.data.text) });
   }
 
   popup(data): void {
     let res = data.split(' ');
-    var stringa = "Aggiungere voto " + res[3] + " a " + res[6] //La frase deve essere sempre: "Aggiungere il voto <numero> allo studente <persona>"
-    var answer = window.confirm(stringa);
-    if (answer = true) {
-      //AGGIUNGI VOTO
-    } else {
-      //NON AGGIUNGERE IL VOTO
+    if (res[0] == "Inserisci"){
+      if(res[1] == "nota"){
+        this.inserisciNota(res);
+      }else if(res[1] == "voto"){
+        this.inserisciVoto(res);
+      }else{
+        //PRINTA MESSAGGIO DI ERRORE
+        return;
+      }
+    }else{
+      //PRINTA UN MESSAGGIO DI ERRORE
+      return;
+    }
+  }
+
+  inserisciNota(res){
+    //NOTA
+  }
+
+  inserisciVoto(res){
+    let voto: string = null;
+    let studente: string = null;
+    for(let i = 2; i < res.lenght(); i++){
+      if(res[i] == "voto"){
+        voto = res[i+1].value;
+      }else if (res[i] == "studente"){
+        studente = res[i+1].value;
+      }
+    }
+    if(voto == null || studente == null){
+      //PRINTA MESSAGGIO DI ERRORE
+    }else {
+      var answer = window.confirm("Inserire il voto "+voto+" allo studente "+studente+"?");
+      if(answer = true){
+        //AGGIUNGI VOTO
+      }else{
+        //NON AGGIUNGERE IL VOTO
+      }
     }
   }
 
