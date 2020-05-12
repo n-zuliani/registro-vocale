@@ -1,48 +1,58 @@
 var express = require('express');
 var router = express.Router();
 var path = require('path');
+var formidable = require('formidable');
 
 /* GET users listing. */
-router.get('/', function(req, res, next) {
-  main(res).catch(console.error);
+router.post('/', function (req, res, next) {
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Accept', 'application/json');
+    headers.append('Access-Control-Allow-Origin', '*');
+    headers.append('Access-Control-Allow-Credentials', 'true');
+    var form = new formidable.IncomingForm();
+    form.parse(req, function (err, fields, files) {
+        var oldpath = files.filetoupload.path;
+        main(res, oldpath).catch(console.error);
+    });
 });
 
-async function main(res) {
-  // Imports the Google Cloud client library
-  const speech = require('@google-cloud/speech');
-  const fs = require('fs');
+async function main(res, filepath) {
+    // Imports the Google Cloud client library
+    const speech = require('@google-cloud/speech');
+    const fs = require('fs');
 
-  // Creates a client
-  const client = new speech.SpeechClient();
+    // Creates a client
+    const client = new speech.SpeechClient();
 
-  // The name of the audio file to transcribe
-  const fileName = path.join(__dirname, 'resources/audio.wav');
+    // The name of the audio file to transcribe
+    const fileName = filepath; //path.join(__dirname, 'resources/audio.wav');
 
-  // Reads a local audio file and converts it to base64
-  const file = fs.readFileSync(fileName);
-  const audioBytes = file.toString('base64');
+    // Reads a local audio file and converts it to base64
+    const file = fs.readFileSync(fileName);
+    const audioBytes = file.toString('base64');
 
-  // The audio file's encoding, sample rate in hertz, and BCP-47 language code
-  const audio = {
-    content: audioBytes,
-  };
-  const config = {
-    encoding: 'LINEAR16',
-    sampleRateHertz: 44100,
-    languageCode: 'it-IT',
-    audioChannelCount: 1
-  };
-  const request = {
-    audio: audio,
-    config: config,
-  };
+    // The audio file's encoding, sample rate in hertz, and BCP-47 language code
+    const audio = {
+        content: audioBytes,
+    };
+    const config = {
+        encoding: 'LINEAR16',
+        sampleRateHertz: 44100,
+        languageCode: 'it-IT',
+        audioChannelCount: 1
+    };
+    const request = {
+        audio: audio,
+        config: config,
+    };
 
-  // Detects speech in the audio file
-  const [response] = await client.recognize(request);
-  const transcription = response.results
-    .map(result => result.alternatives[0].transcript)
-    .join('\n');
-  res.send({text: transcription});
+    // Detects speech in the audio file
+    const [response] = await client.recognize(request);
+    const transcription = response.results
+        .map(result => result.alternatives[0].transcript)
+        .join('\n');
+    res.send({ text: transcription });
 }
 
 module.exports = router;
