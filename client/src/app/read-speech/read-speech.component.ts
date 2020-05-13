@@ -10,7 +10,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 })
 export class ReadSpeechComponent implements OnInit, OnDestroy {
 
-  SERVER_API_URL: string = 'https://3000-ec08a519-78a2-4ec4-95ac-e3611b882280.ws-eu01.gitpod.io';
+  SERVER_API_URL: string = 'https://3000-fe6f28cd-06fe-4850-a379-8ba10515dc04.ws-eu01.gitpod.io';
 
   isRecording = false;
   recordedTime;
@@ -18,6 +18,7 @@ export class ReadSpeechComponent implements OnInit, OnDestroy {
 
   progress: number = 0;
   loading: boolean = false;
+  audioblob: any;
 
   constructor(public http: HttpClient, private audioRecordingService: AudioRecordingService, private sanitizer: DomSanitizer) {
     this.audioRecordingService.recordingFailed().subscribe(() => {
@@ -29,7 +30,10 @@ export class ReadSpeechComponent implements OnInit, OnDestroy {
     });
 
     this.audioRecordingService.getRecordedBlob().subscribe((data) => {
+      console.log("PROVIAMO: " + data.blob)
+      this.audioblob=data.blob;
       this.blobUrl = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(data.blob));
+      console.log(this.blobUrl);
     });
   }
   o: Observable<Object>;
@@ -88,11 +92,12 @@ export class ReadSpeechComponent implements OnInit, OnDestroy {
     let formData = new FormData();
     formData.append('file', upload);
     this.loading = true;
-    this.http.post(this.SERVER_API_URL + '/speech', formData, {
+    this.http.post(this.SERVER_API_URL + '/speech', "ciao", {
       reportProgress: true,
       observe: 'events'
     })
       .subscribe(events => {
+        console.log("bloburl " + this.blobUrl);
         if (events.type == HttpEventType.UploadProgress) {
           this.progress = Math.round(events.loaded / events.total * 100);
         } else if (events.type === HttpEventType.Response) {
@@ -122,7 +127,8 @@ export class ReadSpeechComponent implements OnInit, OnDestroy {
     if (this.isRecording) {
       this.audioRecordingService.stopRecording();
       this.isRecording = false;
-      this.readAudio();
+
+      //this.readAudio();
     }
   }
 
@@ -132,6 +138,11 @@ export class ReadSpeechComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.abortRecording();
+  }
+
+  prova(): void {
+    console.log("stop rec " + this.blobUrl);
+    this.readAudio();
   }
 
 }

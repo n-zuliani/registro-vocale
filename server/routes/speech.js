@@ -5,16 +5,19 @@ var formidable = require('formidable');
 
 /* GET users listing. */
 router.post('/', function (req, res, next) {
-    let headers = new Headers();
+    console.log(req);
+    res.send({'risp':'ciao', 'data': req.body});
+    /* let headers = new Headers();
     headers.append('Content-Type', 'application/json');
     headers.append('Accept', 'application/json');
     headers.append('Access-Control-Allow-Origin', '*');
     headers.append('Access-Control-Allow-Credentials', 'true');
+
     var form = new formidable.IncomingForm();
     form.parse(req, function (err, fields, files) {
         var oldpath = files.filetoupload.path;
         main(res, oldpath).catch(console.error);
-    });
+    });*/
 });
 
 async function main(res, filepath) {
