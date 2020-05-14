@@ -10,7 +10,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 })
 export class ReadSpeechComponent implements OnInit, OnDestroy {
 
-  SERVER_API_URL: string = 'https://3000-fe6f28cd-06fe-4850-a379-8ba10515dc04.ws-eu01.gitpod.io';
+  SERVER_API_URL: string = 'https://3000-e76d2b0d-23f4-4149-8a80-79241c83b25b.ws-eu01.gitpod.io';
 
   isRecording = false;
   recordedTime;
@@ -19,6 +19,8 @@ export class ReadSpeechComponent implements OnInit, OnDestroy {
   progress: number = 0;
   loading: boolean = false;
   audioblob: any;
+
+  data: any;
 
   constructor(public http: HttpClient, private audioRecordingService: AudioRecordingService, private sanitizer: DomSanitizer) {
     this.audioRecordingService.recordingFailed().subscribe(() => {
@@ -30,18 +32,13 @@ export class ReadSpeechComponent implements OnInit, OnDestroy {
     });
 
     this.audioRecordingService.getRecordedBlob().subscribe((data) => {
-      console.log("PROVIAMO: " + data.blob)
-      this.audioblob=data.blob;
+      this.audioblob = data.blob;
+      this.readAudio();
       this.blobUrl = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(data.blob));
-      console.log(this.blobUrl);
     });
   }
-  o: Observable<Object>;
-  data: any;
 
   ngOnInit(): void {
-    //this.o = this.http.get('https://3000-ec08a519-78a2-4ec4-95ac-e3611b882280.ws-eu01.gitpod.io/speech');
-    //this.o.subscribe(data => { this.data = data; this.popup(this.data.text) });
   }
 
   popup(data): void {
@@ -88,23 +85,23 @@ export class ReadSpeechComponent implements OnInit, OnDestroy {
   }
 
   readAudio(): void {
-    let upload = this.blobUrl;
     let formData = new FormData();
-    formData.append('file', upload);
+    formData.append("uploads", this.audioblob, this.audioblob['name']);
     this.loading = true;
-    this.http.post(this.SERVER_API_URL + '/speech', "ciao", {
+    this.http.post(this.SERVER_API_URL + '/speech', formData, {
       reportProgress: true,
       observe: 'events'
     })
       .subscribe(events => {
-        console.log("bloburl " + this.blobUrl);
         if (events.type == HttpEventType.UploadProgress) {
           this.progress = Math.round(events.loaded / events.total * 100);
         } else if (events.type === HttpEventType.Response) {
           this.progress = 0;
           let res = events.body;
-          console.log(res);
+          this.data = res;
           this.loading = false;
+          this.clearRecordedData();
+          this.popup(this.data['text']);
         }
       });
   }
@@ -127,8 +124,6 @@ export class ReadSpeechComponent implements OnInit, OnDestroy {
     if (this.isRecording) {
       this.audioRecordingService.stopRecording();
       this.isRecording = false;
-
-      //this.readAudio();
     }
   }
 
@@ -138,11 +133,6 @@ export class ReadSpeechComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.abortRecording();
-  }
-
-  prova(): void {
-    console.log("stop rec " + this.blobUrl);
-    this.readAudio();
   }
 
 }

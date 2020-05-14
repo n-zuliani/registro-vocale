@@ -1,23 +1,15 @@
 var express = require('express');
 var router = express.Router();
 var path = require('path');
-var formidable = require('formidable');
+//var formidable = require('formidable');
+
+const multipart = require('connect-multiparty');
+const multipartMiddleware = multipart({ uploadDir: path.join(__dirname, 'uploads') });
 
 /* GET users listing. */
-router.post('/', function (req, res, next) {
-    console.log(req);
-    res.send({'risp':'ciao', 'data': req.body});
-    /* let headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    headers.append('Accept', 'application/json');
-    headers.append('Access-Control-Allow-Origin', '*');
-    headers.append('Access-Control-Allow-Credentials', 'true');
-
-    var form = new formidable.IncomingForm();
-    form.parse(req, function (err, fields, files) {
-        var oldpath = files.filetoupload.path;
-        main(res, oldpath).catch(console.error);
-    });*/
+router.post('/', multipartMiddleware, function (req, res, next) {
+    //res.send({ 'message': 'req.files.upload.name' });
+    main(res, req.files.uploads.path).catch(console.error);
 });
 
 async function main(res, filepath) {
@@ -29,7 +21,7 @@ async function main(res, filepath) {
     const client = new speech.SpeechClient();
 
     // The name of the audio file to transcribe
-    const fileName = filepath; //path.join(__dirname, 'resources/audio.wav');
+    const fileName = filepath;
 
     // Reads a local audio file and converts it to base64
     const file = fs.readFileSync(fileName);
@@ -41,9 +33,9 @@ async function main(res, filepath) {
     };
     const config = {
         encoding: 'LINEAR16',
-        sampleRateHertz: 44100,
+        sampleRateHertz: 48000,
         languageCode: 'it-IT',
-        audioChannelCount: 1
+        audioChannelCount: 2
     };
     const request = {
         audio: audio,
