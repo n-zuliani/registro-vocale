@@ -101,7 +101,7 @@ export class ReadSpeechComponent implements OnInit, OnDestroy {
           this.data = res;
           this.loading = false;
           this.clearRecordedData();
-          this.popup(this.data['text']);
+          this.popup(this.data['text']); //a questo punto this.data['text'] contiene il comando in testo e quindi lo passo alla funzione di Grossi che dovrebbe generare il popup
         }
       });
   }

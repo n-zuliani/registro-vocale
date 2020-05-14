@@ -1,14 +1,11 @@
 var express = require('express');
 var router = express.Router();
 var path = require('path');
-//var formidable = require('formidable');
-
 const multipart = require('connect-multiparty');
 const multipartMiddleware = multipart({ uploadDir: path.join(__dirname, 'uploads') });
 
 /* GET users listing. */
 router.post('/', multipartMiddleware, function (req, res, next) {
-    //res.send({ 'message': 'req.files.upload.name' });
     main(res, req.files.uploads.path).catch(console.error);
 });
 
