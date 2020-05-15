@@ -9,6 +9,7 @@ const bodyParser = require("body-parser");
 var indexRouter = require('./routes/index');
 var speechRouter = require('./routes/speech');
 var apiRouter = require('./routes/api');
+var studentRouter = require('./routes/student');
 
 var app = express();
 
@@ -30,9 +31,10 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 
-app.use('/', indexRouter);
+app.use('/', indexRouter); //studentRouter indexRouter
 app.use('/speech', speechRouter);
 app.use('/api', apiRouter);
+app.use('/student', studentRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
