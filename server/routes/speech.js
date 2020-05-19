@@ -30,7 +30,6 @@ async function main(res, filepath) {
     };
     const config = {
         encoding: 'LINEAR16',
-        sampleRateHertz: 48000,
         languageCode: 'it-IT',
         audioChannelCount: 2
     };

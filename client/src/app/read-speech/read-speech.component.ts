@@ -10,7 +10,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 })
 export class ReadSpeechComponent implements OnInit, OnDestroy {
 
-  SERVER_API_URL: string = 'https://3000-e76d2b0d-23f4-4149-8a80-79241c83b25b.ws-eu01.gitpod.io';
+  SERVER_API_URL: string = 'https://3000-dcf43f32-cf80-44e6-8f12-d84a52685873.ws-eu01.gitpod.io';
 
   isRecording = false;
   recordedTime;
@@ -42,44 +42,99 @@ export class ReadSpeechComponent implements OnInit, OnDestroy {
   }
 
   popup(data): void {
+    data = data.toLowerCase();
     let res = data.split(' ');
-    if (res[0] == "Inserisci") {
-      if (res[1] == "nota") {
-        this.inserisciNota(res);
+    if (res[0] == "inserisci") {
+      if (res[1] == "intervento") {
+        this.inserisciIntervento(res);
       } else if (res[1] == "voto") {
         this.inserisciVoto(res);
+      } else if (res[1] == "risposta") {
+        this.inserisciRisposta(res);
       } else {
-        //PRINTA MESSAGGIO DI ERRORE
+        document.getElementById("errore").innerHTML = "Errore: Il comando deve specificare cosa inserire (Voto, Intervento, Risposta).";
         return;
       }
     } else {
-      //PRINTA UN MESSAGGIO DI ERRORE
+      document.getElementById("errore").innerHTML = "Errore: Il comando deve cominciare con 'Inserisci'";
       return;
     }
   }
 
-  inserisciNota(res) {
-    //NOTA
+  inserisciRisposta(res) {
+    let voto: string = null;
+    let cognome: string = null;
+    let nome: string = null;
+    let tipo: string = "R";
+    for (let i = 0; i < res.length; i++) {
+      if (res[i] == "valutazione") {
+        voto = res[i + 1];
+      } else if (res[i] == "studente") {
+        cognome = res[i + 1];
+        nome = res[i + 2 ];
+      }
+    }
+    if (voto == null || cognome == null || nome == null) {
+      document.getElementById("errore").innerHTML = "Errore: C'è stato qualche problema, reinserire il comando come suggerito sopra.";
+    } else {
+      var answer = window.confirm("Inserire risposta con valutazione " + voto + " allo studente " + cognome + " " + nome + "?");
+      if (answer = true) {
+        this.http.post(this.SERVER_API_URL + '/api/inserimentoVoto', {"voto": voto, "tipo": tipo, "nome": nome, "cognome": cognome});
+        document.getElementById("successo").innerHTML = "Valutazione della risposta correttamente inserita!";
+      } else {
+        document.getElementById("errore").innerHTML = "Valutazione della risposta non inserita.";
+      }
+    }
+  }
+
+  inserisciIntervento(res) {
+    let voto: string = null;
+    let cognome: string = null;
+    let nome: string = null;
+    let tipo: string = "I";
+    for (let i = 0; i < res.length; i++) {
+      if (res[i] == "valutazione") {
+        voto = res[i + 1];
+      } else if (res[i] == "studente") {
+        cognome = res[i + 1];
+        nome = res[i + 2 ];
+      }
+    }
+    if (voto == null || cognome == null || nome == null) {
+      document.getElementById("errore").innerHTML = "Errore: C'è stato qualche problema, reinserire il comando come suggerito sopra.";
+    } else {
+      var answer = window.confirm("Inserire l'intervento con valutazione " + voto + " allo studente " + cognome + " " + nome + "?");
+      if (answer = true) {
+        this.http.post(this.SERVER_API_URL + '/api/inserimentoVoto', {"voto": voto, "tipo": tipo, "nome": nome, "cognome": cognome});
+        document.getElementById("successo").innerHTML = "Valutazione dell' intervento correttamente inserita!";
+      } else {
+        document.getElementById("errore").innerHTML = "Valutazione dell' intervento non inserita.";
+      }
+    }
   }
 
   inserisciVoto(res) {
     let voto: string = null;
-    let studente: string = null;
-    for (let i = 2; i < res.lenght(); i++) {
+    let cognome: string = null;
+    let nome: string = null;
+    let tipo: string = "V";
+    for (let i = 0; i < res.length; i++) {
       if (res[i] == "voto") {
-        voto = res[i + 1].value;
+        voto = res[i + 1];
       } else if (res[i] == "studente") {
-        studente = res[i + 1].value;
+        cognome = res[i + 1];
+        nome = res[i + 2 ];
       }
     }
-    if (voto == null || studente == null) {
-      //PRINTA MESSAGGIO DI ERRORE
+    if (voto == null || cognome == null || nome == null) {
+      document.getElementById("errore").innerHTML = "Errore: C'è stato qualche problema, reinserire il comando come suggerito sopra.";
     } else {
-      var answer = window.confirm("Inserire il voto " + voto + " allo studente " + studente + "?");
+      var answer = window.confirm("Inserire il voto " + voto + " allo studente " + cognome + " " + nome + "?");
       if (answer = true) {
-        //AGGIUNGI VOTO
+        this.http.post(this.SERVER_API_URL + '/api/inserimentoVoto', {"voto": voto, "tipo": tipo, "nome": nome, "cognome": cognome});
+        document.getElementById("successo").innerHTML = "Voto correttamente inserito!";
       } else {
-        //NON AGGIUNGERE IL VOTO
+        document.getElementById("errore").innerHTML = "Voto non inserito.";
       }
     }
   }
@@ -101,7 +156,7 @@ export class ReadSpeechComponent implements OnInit, OnDestroy {
           this.data = res;
           this.loading = false;
           this.clearRecordedData();
-          this.popup(this.data['text']); //a questo punto this.data['text'] contiene il comando in testo e quindi lo passo alla funzione di Grossi che dovrebbe generare il popup
+          this.popup(this.data['text']);
         }
       });
   }

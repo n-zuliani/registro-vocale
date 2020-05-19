@@ -1,5 +1,10 @@
-<pre>{{data | json}}</pre>
 <div *ngIf="loading">Lettura al {{progress}}% ...</div>
+<b><u><i>Suggerimenti di inserimento:</i></u></b>
+<ul>
+  <li>Voto: "Inserisci voto &lt;voto&gt; per lo studente &lt;cognome&gt; &lt;nome&gt;"</li>
+  <li>Intervento: "Inserisci intervento con valutazione &lt;valutazione&gt; per lo studente &lt;cognome&gt; &lt;nome&gt;"</li>
+  <li>Risposta: "Inserisci risposta con valutazione &lt;valutazione&gt; per lo studente &lt;cognome&gt; &lt;nome&gt;"</li>
+</ul>
 <div>
 	<button class="start-button" *ngIf="!isRecording && !blobUrl" (click)="startRecording()">Avvia comando vocale</button>
 	<button class="stop-button" *ngIf="isRecording && !blobUrl" (click)="stopRecording()">Invia comando</button>
@@ -14,3 +19,5 @@
 	</div>
   -->
 </div>
+<p id="errore"></p>
+<p id="successo"></p>
