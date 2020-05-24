@@ -10,7 +10,10 @@ import { DomSanitizer } from '@angular/platform-browser';
 })
 export class ReadSpeechComponent implements OnInit, OnDestroy {
 
-  SERVER_API_URL: string = 'https://3000-dcf43f32-cf80-44e6-8f12-d84a52685873.ws-eu01.gitpod.io';
+  testObserver : Observable<Object>;
+  testData : Object;
+
+  SERVER_API_URL: string = 'https://3000-c89fe3d2-10ff-4f3c-b12f-6bd8c0dbfc00.ws-eu01.gitpod.io';
 
   isRecording = false;
   recordedTime;
@@ -36,6 +39,7 @@ export class ReadSpeechComponent implements OnInit, OnDestroy {
       this.readAudio();
       this.blobUrl = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(data.blob));
     });
+
   }
 
   ngOnInit(): void {
@@ -53,65 +57,118 @@ export class ReadSpeechComponent implements OnInit, OnDestroy {
         this.inserisciRisposta(res);
       } else {
         document.getElementById("errore").innerHTML = "Errore: Il comando deve specificare cosa inserire (Voto, Intervento, Risposta).";
+        document.getElementById("successo").innerHTML = " ";
         return;
       }
     } else {
       document.getElementById("errore").innerHTML = "Errore: Il comando deve cominciare con 'Inserisci'";
+      document.getElementById("successo").innerHTML = " ";
       return;
     }
   }
 
   inserisciRisposta(res) {
     let voto: string = null;
+    let temp: string = null;
     let cognome: string = null;
     let nome: string = null;
     let tipo: string = "R";
     for (let i = 0; i < res.length; i++) {
       if (res[i] == "valutazione") {
-        voto = res[i + 1];
+         temp = res[i + 1];
+        if(temp == 'ottimo'){
+          voto = 'O';
+        }
+        else if (temp == 'distinto'){
+          voto = 'D'
+        }
+        else if (temp == 'buono'){
+          voto = 'B'
+        }
+        else if (temp == 'discreto'){
+          voto = 'DC'
+        }
+        else if (temp == 'sufficiente'){
+          voto = 'S'
+        }
+        else if (temp == 'insufficiente'){
+          voto = 'INS'
+        }
+        else {
+          voto = null;
+        }
       } else if (res[i] == "studente") {
-        cognome = res[i + 1];
-        nome = res[i + 2 ];
+        cognome = res[i + 1].charAt(0).toUpperCase() + res[i + 1].slice(1);
+        nome = res[i + 2].charAt(0).toUpperCase() + res[i + 2].slice(1);
       }
     }
     if (voto == null || cognome == null || nome == null) {
       document.getElementById("errore").innerHTML = "Errore: C'è stato qualche problema, reinserire il comando come suggerito sopra.";
+      document.getElementById("successo").innerHTML = " ";
     } else {
-      var answer = window.confirm("Inserire risposta con valutazione " + voto + " allo studente " + cognome + " " + nome + "?");
+      var answer = window.confirm("Inserire risposta con valutazione " + temp + " allo studente " + cognome + " " + nome + "?");
       if (answer = true) {
-        this.http.post(this.SERVER_API_URL + '/api/inserimentoVoto', {"voto": voto, "tipo": tipo, "nome": nome, "cognome": cognome});
+        this.http.post(this.SERVER_API_URL + '/api/inserimentoVoto', {"voto": voto, "tipo": tipo, "nome": nome, "cognome": cognome}).subscribe(r=>{console.log('ok')});
         document.getElementById("successo").innerHTML = "Valutazione della risposta correttamente inserita!";
+        document.getElementById("errore").innerHTML = " ";
       } else {
         document.getElementById("errore").innerHTML = "Valutazione della risposta non inserita.";
+        document.getElementById("successo").innerHTML = " ";
       }
     }
   }
 
   inserisciIntervento(res) {
     let voto: string = null;
+    let temp: string = null;
     let cognome: string = null;
     let nome: string = null;
     let tipo: string = "I";
     for (let i = 0; i < res.length; i++) {
       if (res[i] == "valutazione") {
-        voto = res[i + 1];
+         temp = res[i + 1];
+        if(temp == 'ottimo'){
+          voto = 'O';
+        }
+        else if (temp == 'distinto'){
+          voto = 'D'
+        }
+        else if (temp == 'buono'){
+          voto = 'B'
+        }
+        else if (temp == 'discreto'){
+          voto = 'DC'
+        }
+        else if (temp == 'sufficiente'){
+          voto = 'S'
+        }
+        else if (temp == 'insufficiente'){
+          voto = 'INS'
+        }
+        else {
+          voto = null;
+        }
       } else if (res[i] == "studente") {
-        cognome = res[i + 1];
-        nome = res[i + 2 ];
+        cognome = res[i + 1].charAt(0).toUpperCase() + res[i + 1].slice(1);
+        nome = res[i + 2].charAt(0).toUpperCase() + res[i + 2].slice(1);
       }
     }
     if (voto == null || cognome == null || nome == null) {
       document.getElementById("errore").innerHTML = "Errore: C'è stato qualche problema, reinserire il comando come suggerito sopra.";
+      document.getElementById("successo").innerHTML = " ";
     } else {
-      var answer = window.confirm("Inserire l'intervento con valutazione " + voto + " allo studente " + cognome + " " + nome + "?");
+      var answer = window.confirm("Inserire l'intervento con valutazione " + temp + " allo studente " + cognome + " " + nome + "?");
       if (answer = true) {
-        this.http.post(this.SERVER_API_URL + '/api/inserimentoVoto', {"voto": voto, "tipo": tipo, "nome": nome, "cognome": cognome});
+        this.http.post(this.SERVER_API_URL + '/api/inserimentoVoto', {"voto": voto, "tipo": tipo, "nome": nome, "cognome": cognome}).subscribe(r=>{console.log('ok')});
         document.getElementById("successo").innerHTML = "Valutazione dell' intervento correttamente inserita!";
+        document.getElementById("errore").innerHTML = " ";
       } else {
         document.getElementById("errore").innerHTML = "Valutazione dell' intervento non inserita.";
+        document.getElementById("successo").innerHTML = " ";
       }
     }
   }
+
 
   inserisciVoto(res) {
     let voto: string = null;
@@ -122,19 +179,23 @@ export class ReadSpeechComponent implements OnInit, OnDestroy {
       if (res[i] == "voto") {
         voto = res[i + 1];
       } else if (res[i] == "studente") {
-        cognome = res[i + 1];
-        nome = res[i + 2 ];
+        cognome = res[i + 1].charAt(0).toUpperCase() + res[i + 1].slice(1);
+        nome = res[i + 2].charAt(0).toUpperCase() + res[i + 2].slice(1);
       }
     }
     if (voto == null || cognome == null || nome == null) {
       document.getElementById("errore").innerHTML = "Errore: C'è stato qualche problema, reinserire il comando come suggerito sopra.";
+      document.getElementById("successo").innerHTML = " ";
     } else {
       var answer = window.confirm("Inserire il voto " + voto + " allo studente " + cognome + " " + nome + "?");
       if (answer = true) {
-        this.http.post(this.SERVER_API_URL + '/api/inserimentoVoto', {"voto": voto, "tipo": tipo, "nome": nome, "cognome": cognome});
+        console.log(this.SERVER_API_URL);
+        this.http.post(this.SERVER_API_URL + '/api/inserimentoVoto', {"voto": voto, "tipo": tipo, "nome": nome, "cognome": cognome}).subscribe(r=>{console.log('ok')});
         document.getElementById("successo").innerHTML = "Voto correttamente inserito!";
+        document.getElementById("errore").innerHTML = " ";
       } else {
         document.getElementById("errore").innerHTML = "Voto non inserito.";
+        document.getElementById("successo").innerHTML = " ";
       }
     }
   }
