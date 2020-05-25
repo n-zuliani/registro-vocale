@@ -1,0 +1,124 @@
+{
+    "recordsets": [
+        [
+            {
+                "ID": [
+                    1,
+                    1
+                ],
+                "Voto": "10",
+                "Tipo": "V",
+                "Data": "2020-01-23T00:00:00.000Z",
+                "IDStudente": 1,
+                "Nome": "Mario",
+                "Cognome": "Rossi",
+                "Anno": 4,
+                "Sezione": "A"
+            },
+            {
+                "ID": [
+                    3,
+                    1
+                ],
+                "Voto": "O",
+                "Tipo": "I",
+                "Data": "2020-02-10T00:00:00.000Z",
+                "IDStudente": 1,
+                "Nome": "Mario",
+                "Cognome": "Rossi",
+                "Anno": 4,
+                "Sezione": "A"
+            },
+            {
+                "ID": [
+                    4,
+                    3
+                ],
+                "Voto": "D",
+                "Tipo": "R",
+                "Data": "2019-12-10T00:00:00.000Z",
+                "IDStudente": 3,
+                "Nome": "Alberto",
+                "Cognome": "Verdi",
+                "Anno": 5,
+                "Sezione": "B"
+            },
+            {
+                "ID": [
+                    21,
+                    3
+                ],
+                "Voto": "D",
+                "Tipo": "R",
+                "Data": "2020-05-24T00:00:00.000Z",
+                "IDStudente": 3,
+                "Nome": "Alberto",
+                "Cognome": "Verdi",
+                "Anno": 5,
+                "Sezione": "B"
+            }
+        ]
+    ],
+    "recordset": [
+        {
+            "ID": [
+                1,
+                1
+            ],
+            "Voto": "10",
+            "Tipo": "V",
+            "Data": "2020-01-23T00:00:00.000Z",
+            "IDStudente": 1,
+            "Nome": "Mario",
+            "Cognome": "Rossi",
+            "Anno": 4,
+            "Sezione": "A"
+        },
+        {
+            "ID": [
+                3,
+                1
+            ],
+            "Voto": "O",
+            "Tipo": "I",
+            "Data": "2020-02-10T00:00:00.000Z",
+            "IDStudente": 1,
+            "Nome": "Mario",
+            "Cognome": "Rossi",
+            "Anno": 4,
+            "Sezione": "A"
+        },
+        {
+            "ID": [
+                4,
+                3
+            ],
+            "Voto": "D",
+            "Tipo": "R",
+            "Data": "2019-12-10T00:00:00.000Z",
+            "IDStudente": 3,
+            "Nome": "Alberto",
+            "Cognome": "Verdi",
+            "Anno": 5,
+            "Sezione": "B"
+        },
+        {
+            "ID": [
+                21,
+                3
+            ],
+            "Voto": "D",
+            "Tipo": "R",
+            "Data": "2020-05-24T00:00:00.000Z",
+            "IDStudente": 3,
+            "Nome": "Alberto",
+            "Cognome": "Verdi",
+            "Anno": 5,
+            "Sezione": "B"
+        }
+    ],
+    "output": {},
+    "rowsAffected": [
+        4
+    ]
+}
