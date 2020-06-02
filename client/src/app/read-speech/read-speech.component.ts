@@ -13,7 +13,7 @@ export class ReadSpeechComponent implements OnInit, OnDestroy {
   testObserver : Observable<Object>;
   testData : Object;
 
-  SERVER_API_URL: string = 'https://3000-c89fe3d2-10ff-4f3c-b12f-6bd8c0dbfc00.ws-eu01.gitpod.io';
+  SERVER_API_URL: string = 'https://3000-d17c705d-c9e8-4030-bbea-1c4fca1487ed.ws-eu01.gitpod.io';
 
   isRecording = false;
   recordedTime;
