@@ -1,14 +1,1 @@
 <router-outlet></router-outlet>
-
-<div *ngIf="list">
-<h3>REGISTRO</h3>
-<br>
-  <div *ngFor="let voto of list.recordset">
-    <div>
-      <h6>{{voto.Nome}} {{voto.Cognome}} {{voto.Anno}}ª{{voto.Sezione}}</h6>
-      <p *ngIf="voto.Tipo == 'V'" class="d-inline">VOTO:</p> <p *ngIf="voto.Tipo == 'I'" class="d-inline">INTERVENTO:</p> <p *ngIf="voto.Tipo == 'R'" class="d-inline">RISPOSTA:</p> <p class="d-inline"> {{voto.Voto}}</p>
-      <br>
-      <br>
-    </div>
-  </div>
-</div>
