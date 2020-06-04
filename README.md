@@ -15,8 +15,8 @@ Permette di inserire valutazioni e voti per interventi e risposte degli studenti
 
 &nbsp;   &nbsp;   &nbsp;   &nbsp;   &nbsp;  
 ## Per utilizzarlo
-- far partire il server node ```npm i start```
-- copiare l'URL del server nel formato ```https://xxx.gitpod.io``` nei file ```read-speech-component.ts``` e ```app.component.ts```
+- far partire il server node ```npm start```
+- copiare l'URL del server nel formato ```https://xxx.gitpod.io``` nei file ```read-speech-component.ts``` e ```table.component.ts```
 - far partire il client con i comandi
 ```bash
 cd /workspace/registro-vocale/client
