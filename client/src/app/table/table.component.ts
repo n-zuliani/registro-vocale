@@ -16,7 +16,7 @@ export class TableComponent implements OnInit {
 
   makeRequest(): void {
     //oFoo : Observable<Foo[]>; va dichiarato tra gli attributi della classe
-    this.oFoo = this.http.get('https://3000-b1dff558-df26-41e4-9733-d1b78a5ecf77.ws-eu01.gitpod.io/student/all');
+    this.oFoo = this.http.get('https://3000-db69770a-f1e0-4ecf-923b-923f3f1000cf.ws-eu01.gitpod.io/student/all');
     this.oFoo.subscribe(this.getData);
   }
 

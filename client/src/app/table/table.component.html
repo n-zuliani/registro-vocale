@@ -1,7 +1,7 @@
-<h2>Basic Request</h2>
+<h2>REGISTRO ELETTRONICO</h2>
 <button type="button" (click)="makeRequest()">Make Request</button>
 <div *ngIf="data">
-	<h3>REGISTRO</h3>
+	<h3>STUDENTI</h3>
 	<br>
 
 <table>
@@ -9,28 +9,17 @@
     <th>Nome</th>
     <th>Cognome</th>
     <th>Classe</th>
-    <th>Voto / Intervento / Risposta<th>
+    <th>Voto</th>
+    <th>Tipo<th>
   </tr>
-<div *ngFor="let voto of data.recordset">
-  <tr>
+  <tr *ngFor="let voto of data.recordset">
     <td>{{voto.Nome}}</td>
     <td>{{voto.Cognome}}</td>
     <td>{{voto.Anno}}°{{voto.Sezione}}</td>
     <td>{{voto.Voto}}</td>
+    <td *ngIf="voto.Tipo == 'I'">Intervento</td>
+    <td *ngIf="voto.Tipo == 'V'">Voto</td>
+    <td *ngIf="voto.Tipo == 'R'">Risposta</td>
   </tr>
-</div>
 </table>
-	</div>
-
-
-<!---
-<div>
-	<h6>{{voto.Nome}} {{voto.Cognome}} {{voto.Anno}}ª{{voto.Sezione}}</h6>
-	<p *ngIf="voto.Tipo == 'V'" class="d-inline">VOTO:</p>
-	<p *ngIf="voto.Tipo == 'I'" class="d-inline">INTERVENTO:</p>
-	<p *ngIf="voto.Tipo == 'R'" class="d-inline">RISPOSTA:</p>
-	<p class="d-inline"> {{voto.Voto}}</p>
-	<br>
-	<br>
-    </div>
--->
+</div>
